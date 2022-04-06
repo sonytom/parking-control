@@ -1,2 +1,6 @@
-package com.api.parkingcontrol.services;public interface ParkinSpotServiceInterface {
+package com.api.parkingcontrol.services;
+
+public interface ParkinSpotServiceInterface{
+public ParkinSpotService save(ParkinSpotService parkinSpotService);
+
 }
