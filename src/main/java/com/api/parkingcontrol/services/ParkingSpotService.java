@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ParkingSpotService implements ParkingSpotServiceInterface {
@@ -31,9 +33,8 @@ public class ParkingSpotService implements ParkingSpotServiceInterface {
     }
 
 
-public List<ParkingSpotModel> findAll(){
-        return parkingSpotRepository.findAll();
-}
+
+
 
     @Transactional
     @Override
@@ -50,6 +51,19 @@ public List<ParkingSpotModel> findAll(){
 
         parkingSpotRepository.save(parkingSpotModel);
         return ResponseEntity.status(HttpStatus.OK).body(parkingSpotModel);
+    }
+
+    public ResponseEntity<ParkingSpotModel> getParkingSpotById(UUID id) {
+        Optional<ParkingSpotModel> parkingSpotModel1 = parkingSpotRepository.findById(id);
+
+        // create validation
+
+        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotModel1.get());
+
+    }
+
+    public ResponseEntity<List<ParkingSpotModel>> getAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotRepository.findAll());
     }
 }
 

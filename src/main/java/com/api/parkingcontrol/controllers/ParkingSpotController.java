@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -27,9 +28,18 @@ public class ParkingSpotController {
         return parkingSpotService.save(parkingSpotDto);
     }
 
+    @GetMapping("parkingspot/{id}")
+    public ResponseEntity<ParkingSpotModel> getParkingSpotById(@PathVariable (value = "id") UUID id) {
+        return parkingSpotService.getParkingSpotById(id);
+    }
+
+
+
     @GetMapping
     public ResponseEntity<List<ParkingSpotModel>> getAllParkingSpots(){
-        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotService.findAll());
+
+
+        return parkingSpotService.getAll();
     }
 
 }
