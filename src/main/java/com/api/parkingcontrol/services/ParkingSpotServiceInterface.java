@@ -6,10 +6,6 @@ import com.api.parkingcontrol.models.ParkingSpotModel;
 import org.springframework.http.ResponseEntity;
 
 public interface ParkingSpotServiceInterface {
-
-
     ResponseEntity<ParkingSpotModel> save (ParkingSpotDto parkingSpotDto) throws  DataIntegrityViolationException;
-
-
 
 }

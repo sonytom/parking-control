@@ -9,8 +9,6 @@ import java.util.Objects;
 @Data
 public class ParkingSpotDto {
     private ParkingSpotRepository parkingSpotRepository;
-
-
     @NotBlank
     private String parkingSpotNumber;
     @NotBlank

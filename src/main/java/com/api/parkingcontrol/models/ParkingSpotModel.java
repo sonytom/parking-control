@@ -1,17 +1,20 @@
 package com.api.parkingcontrol.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "TB_PARKING_SPOT")
-public class ParkingSpotModel implements Serializable {
+
+
+
+public class ParkingSpotModel extends RepresentationModel<ParkingSpotModel> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
