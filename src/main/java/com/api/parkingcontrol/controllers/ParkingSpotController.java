@@ -2,9 +2,11 @@ package com.api.parkingcontrol.controllers;
 
 import com.api.parkingcontrol.dto.ParkingSpotDto;
 import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
+import com.api.parkingcontrol.exeption.NoSuchElementException;
 import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.services.ParkingSpotService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -16,11 +18,20 @@ import java.util.UUID;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/parking-spot")
 public class ParkingSpotController {
-
     final ParkingSpotService parkingSpotService;
 
     public ParkingSpotController(ParkingSpotService parkingSpotService) {
         this.parkingSpotService = parkingSpotService;
+    }
+
+    @GetMapping
+    public ParkingSpotModel getAllParkingSpots() throws ResourceNotFoundException, NoSuchElementException {
+        return parkingSpotService.getAll();
+    }
+
+    @GetMapping("parkingspot-id/{id}")
+    public ResponseEntity<ParkingSpotModel> getParkingSpotById(@PathVariable (value = "id") UUID parkingID) throws ResourceNotFoundException, NoSuchElementException {
+        return parkingSpotService.getParkingSpotById(parkingID);
     }
 
     @PostMapping
@@ -28,15 +39,6 @@ public class ParkingSpotController {
         return parkingSpotService.save(parkingSpotDto);
     }
 
-    @GetMapping("parkingspot-id/{id}")
-    public ResponseEntity<ParkingSpotModel> getParkingSpotById(@PathVariable (value = "id") UUID parkingID) throws ResourceNotFoundException {
-        return parkingSpotService.getParkingSpotById(parkingID);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ParkingSpotModel>> getAllParkingSpots() throws ResourceNotFoundException {
-        return parkingSpotService.getAll();
-    }
 
     @DeleteMapping("parkingspot-id/{id}")
     public Map<String, Boolean> deleteParkingSpot(@PathVariable(value = "id") UUID parkingID) throws ResourceNotFoundException {

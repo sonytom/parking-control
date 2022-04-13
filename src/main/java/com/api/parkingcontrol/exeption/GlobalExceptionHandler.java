@@ -19,6 +19,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public HttpEntity<ErrorDetails> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(true));
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public HttpEntity<ErrorDetails> noSuchElementException(ResourceNotFoundException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(true));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NO_CONTENT);
+    }
+
     // global
     @ExceptionHandler(Exception.class)
     public HttpEntity<ErrorDetails> globleExcpetionHandler(Exception ex, WebRequest request) {

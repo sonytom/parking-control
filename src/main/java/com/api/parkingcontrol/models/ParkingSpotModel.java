@@ -1,6 +1,8 @@
 package com.api.parkingcontrol.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
@@ -10,10 +12,9 @@ import java.util.UUID;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "TB_PARKING_SPOT")
-
-
-
 public class ParkingSpotModel extends RepresentationModel<ParkingSpotModel> implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -38,14 +39,6 @@ public class ParkingSpotModel extends RepresentationModel<ParkingSpotModel> impl
     private String apartment;
     @Column(nullable = false, length = 30)
     private String block;
-
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
-    }
 
     public UUID getId() {
         return id;
@@ -95,6 +88,14 @@ public class ParkingSpotModel extends RepresentationModel<ParkingSpotModel> impl
         this.colorCar = colorCar;
     }
 
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
     public String getResponsibleName() {
         return responsibleName;
     }
@@ -118,6 +119,4 @@ public class ParkingSpotModel extends RepresentationModel<ParkingSpotModel> impl
     public void setBlock(String block) {
         this.block = block;
     }
-
-
 }
