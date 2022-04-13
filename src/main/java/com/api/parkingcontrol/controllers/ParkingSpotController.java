@@ -25,7 +25,7 @@ public class ParkingSpotController {
     }
 
     @GetMapping
-    public ParkingSpotModel getAllParkingSpots() throws ResourceNotFoundException, NoSuchElementException {
+    public ResponseEntity<List<ParkingSpotModel>> getAllParkingSpots() throws ResourceNotFoundException, NoSuchElementException {
         return parkingSpotService.getAll();
     }
 

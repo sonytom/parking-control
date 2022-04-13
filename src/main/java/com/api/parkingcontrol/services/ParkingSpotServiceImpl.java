@@ -31,7 +31,6 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     final ParkingSpotValidation parkingSpotValidation;
 
 
-
     public ParkingSpotServiceImpl(ParkingSpotRepository parkingSpotRepository, ParkingSpotValidationImpl parkSpotValidation) {
         this.parkingSpotRepository = parkingSpotRepository;
         this.parkingSpotValidation = parkSpotValidation;
@@ -39,7 +38,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
 
     @Transactional
     @Override
-    public ResponseEntity<ParkingSpotModel> save(ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException{
+    public ResponseEntity<ParkingSpotModel> save(ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException {
         var validation = parkingSpotValidation.validationLicensePLate(parkingSpotDto);
         ParkingSpotModel parkingSpotModel = new ParkingSpotModel();
         BeanUtils.copyProperties(validation, parkingSpotModel);
@@ -49,12 +48,12 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     }
 
     public ResponseEntity<ParkingSpotModel> getParkingSpotById(UUID parkingID) throws ResourceNotFoundException, NoSuchElementException {
-        ParkingSpotModel par = new ParkingSpotModel();
 
 
-        Optional<ParkingSpotModel> parkingSpotID = Optional.ofNullable(parkingSpotRepository.findById(parkingID).isPresent()orElseThrow(() ->
+
+        Optional<ParkingSpotModel> parkingSpotID = Optional.ofNullable(parkingSpotRepository.findById(parkingID).orElseThrow(() ->
                 new NoSuchElementException("asd")));
-        parkingSpotValidation.ifParkingSpotNotempty(parkingSpotID.get());
+        //parkingSpotValidation.ifParkingSpotNotempty(parkingSpotID.get());
         // validation empty ^
         parkingSpotID.get().add(linkTo(methodOn(ParkingSpotController.class).getAllParkingSpots()).withRel("List all ParkSpots"));
         return new ResponseEntity<>(parkingSpotID.get(), HttpStatus.OK);
@@ -62,33 +61,24 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     }
 
 
-
-
-
-    public Optional <List <ParkingSpotModel>> getAll() throws ResourceNotFoundException, NoSuchElementException {
-
-        Optional<ParkingSpotModel> parkingSpotModelOptional;
-
-        parkingSpotModelOptional.stream().map().collect(Collectors.);
-
+    public ResponseEntity<List<ParkingSpotModel>> getAll() throws ResourceNotFoundException, NoSuchElementException {
         List<ParkingSpotModel> getAllparking = parkingSpotRepository.findAll();
         for (ParkingSpotModel parkingSpotModel : getAllparking) {
             UUID parkingID = parkingSpotModel.getId();
             parkingSpotModel.add(linkTo(methodOn(ParkingSpotController.class).getParkingSpotById(parkingID)).withSelfRel());
         }
-        return Optional.ofNullable(getAllparking);
-        }
+        return Optional.of(new ResponseEntity<>(getAllparking, HttpStatus.OK)).orElseThrow(() -> new ResourceNotFoundException("lista vazia"));
+    }
 
 
-
-   public Map<String, Boolean> deleteParkingSpot(UUID parkingID) throws ResourceNotFoundException {
-       ParkingSpotModel parkingSpotModel = parkingSpotRepository.findById(parkingID)
-               .orElseThrow(() -> new ResourceNotFoundException("No heve for delete :: " + parkingID));
-       parkingSpotRepository.delete(parkingSpotModel);
-       Map<String, Boolean> response = new HashMap<>();
-       response.put("deleted", Boolean.TRUE);
-       return response;
-   }
+    public Map<String, Boolean> deleteParkingSpot(UUID parkingID) throws ResourceNotFoundException {
+        ParkingSpotModel parkingSpotModel = parkingSpotRepository.findById(parkingID)
+                .orElseThrow(() -> new ResourceNotFoundException("No heve for delete :: " + parkingID));
+        parkingSpotRepository.delete(parkingSpotModel);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
 
     public ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) throws ResourceNotFoundException {
 
@@ -100,7 +90,6 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
         BeanUtils.copyProperties(parkingSpotDetails, parkingSpotModel);
 
 
-
         parkingSpotModel.setParkingSpotNumber(parkingSpotDetails.getParkingSpotNumber());
         parkingSpotModel.setLicensePlateCar(parkingSpotDetails.getLicensePlateCar());
         parkingSpotModel.setBrandCar(parkingSpotDetails.getBrandCar());
@@ -110,8 +99,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
         parkingSpotModel.setApartment(parkingSpotDetails.getApartment());
         parkingSpotModel.setBlock(parkingSpotDetails.getBlock());
 
-            return parkingSpotRepository.save(parkingSpotModel);
-
+        return parkingSpotRepository.save(parkingSpotModel);
 
 
     }

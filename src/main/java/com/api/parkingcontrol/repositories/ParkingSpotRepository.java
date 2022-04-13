@@ -12,11 +12,11 @@ import java.util.UUID;
 @Repository
 public interface ParkingSpotRepository extends JpaRepository<ParkingSpotModel, UUID> {
 
-    boolean existsByLicensePlateCar(String licensePlateCar) throws DataIntegrityViolationException;
+    boolean existsByLicensePlateCar(String licensePlateCar) ;
 
-    boolean existsByParkingSpotNumber(String parkingSpotNumber) throws DataIntegrityViolationException;
+    boolean existsByParkingSpotNumber(String parkingSpotNumber) ;
 
-    boolean existsByApartmentAndBlock(String apartment, String block) throws DataIntegrityViolationException;
+    boolean existsByApartmentAndBlock(String apartment, String block) ;
 
     boolean existsById (UUID id);
 
