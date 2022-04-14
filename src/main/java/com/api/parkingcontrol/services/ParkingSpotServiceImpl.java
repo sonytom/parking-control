@@ -2,24 +2,17 @@ package com.api.parkingcontrol.services;
 
 import com.api.parkingcontrol.controllers.ParkingSpotController;
 import com.api.parkingcontrol.dto.ParkingSpotDto;
-import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
 import com.api.parkingcontrol.exeption.NoSuchElementException;
 import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.repositories.ParkingSpotRepository;
-import com.api.parkingcontrol.validation.ParkingSpotValidationImpl;
-import com.api.parkingcontrol.validation.ParkingSpotValidation;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -28,80 +21,73 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ParkingSpotServiceImpl implements ParkingSpotService {
 
     final ParkingSpotRepository parkingSpotRepository;
-    final ParkingSpotValidation parkingSpotValidation;
 
 
-    public ParkingSpotServiceImpl(ParkingSpotRepository parkingSpotRepository, ParkingSpotValidationImpl parkSpotValidation) {
+    public ParkingSpotServiceImpl(ParkingSpotRepository parkingSpotRepository) {
         this.parkingSpotRepository = parkingSpotRepository;
-        this.parkingSpotValidation = parkSpotValidation;
+
     }
 
     @Transactional
     @Override
-    public ResponseEntity<ParkingSpotModel> save(ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException {
-        var validation = parkingSpotValidation.validationLicensePLate(parkingSpotDto);
+    public ParkingSpotModel save(ParkingSpotDto parkingSpotDto) {
         ParkingSpotModel parkingSpotModel = new ParkingSpotModel();
-        BeanUtils.copyProperties(validation, parkingSpotModel);
+        BeanUtils.copyProperties(parkingSpotDto, parkingSpotModel);
         parkingSpotModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-        parkingSpotRepository.save(parkingSpotModel);
-        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotModel);
+        return Optional.of(parkingSpotRepository.save(parkingSpotModel)).orElseThrow(() -> new ResourceNotFoundException("lista vazia"));
     }
 
-    public ResponseEntity<ParkingSpotModel> getParkingSpotById(UUID parkingID) throws ResourceNotFoundException, NoSuchElementException {
 
 
-
-        Optional<ParkingSpotModel> parkingSpotID = Optional.ofNullable(parkingSpotRepository.findById(parkingID).orElseThrow(() ->
-                new NoSuchElementException("asd")));
-        //parkingSpotValidation.ifParkingSpotNotempty(parkingSpotID.get());
-        // validation empty ^
-        parkingSpotID.get().add(linkTo(methodOn(ParkingSpotController.class).getAllParkingSpots()).withRel("List all ParkSpots"));
-        return new ResponseEntity<>(parkingSpotID.get(), HttpStatus.OK);
+    public ParkingSpotModel getParkingSpotById(UUID parkingID)  {
+                      Optional<ParkingSpotModel> parkingSpotID = Optional.ofNullable(parkingSpotRepository.findById(parkingID).orElseThrow(() ->
+                      new ResourceNotFoundException("Não existe com este id ")));
+              return parkingSpotID.get().add(linkTo(methodOn(ParkingSpotController.class).getAllParkingSpots()).withRel("List all ParkSpots"));
 
     }
 
 
-    public ResponseEntity<List<ParkingSpotModel>> getAll() throws ResourceNotFoundException, NoSuchElementException {
+    public List<ParkingSpotModel> getAll() {
+
+        // refatorar para stream talves
+
         List<ParkingSpotModel> getAllparking = parkingSpotRepository.findAll();
         for (ParkingSpotModel parkingSpotModel : getAllparking) {
             UUID parkingID = parkingSpotModel.getId();
             parkingSpotModel.add(linkTo(methodOn(ParkingSpotController.class).getParkingSpotById(parkingID)).withSelfRel());
         }
-        return Optional.of(new ResponseEntity<>(getAllparking, HttpStatus.OK)).orElseThrow(() -> new ResourceNotFoundException("lista vazia"));
+        return Optional.of((getAllparking)).orElseThrow(() -> new ResourceNotFoundException("lista vazia"));
     }
 
 
-    public Map<String, Boolean> deleteParkingSpot(UUID parkingID) throws ResourceNotFoundException {
-        ParkingSpotModel parkingSpotModel = parkingSpotRepository.findById(parkingID)
-                .orElseThrow(() -> new ResourceNotFoundException("No heve for delete :: " + parkingID));
-        parkingSpotRepository.delete(parkingSpotModel);
+    @Transactional
+    public Map<String, Boolean> deleteParkingSpot(UUID parkingID)  {
+        Optional<ParkingSpotModel> parkingSpotID = Optional.ofNullable(parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Não tem para deletar ")));
+        parkingSpotRepository.delete(parkingSpotID.get());
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
     }
 
-    public ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) throws ResourceNotFoundException {
+    @Transactional
+    public ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) {
+        // fazer de outro jeito
+        // return ResponseEntity.status(HttpStatus.OK).body(parkingSpotService.save(parkingSpotModel));
+        //  parkingSpotModel.setParkingSpotNumber(parkingSpotDetails.getParkingSpotNumber());
+        //  parkingSpotModel.setLicensePlateCar(parkingSpotDetails.getLicensePlateCar());
+        //  parkingSpotModel.setBrandCar(parkingSpotDetails.getBrandCar());
+        //  parkingSpotModel.setModelCar(parkingSpotDetails.getModelCar());
+        //  parkingSpotModel.setColorCar(parkingSpotDetails.getColorCar());
+        //  parkingSpotModel.setResponsibleName(parkingSpotDetails.getResponsibleName());
+        //  parkingSpotModel.setApartment(parkingSpotDetails.getApartment());
+        //  parkingSpotModel.setBlock(parkingSpotDetails.getBlock());
 
-        // validation noot alowed change date and id
-        // if and exists conflict
-
-        ParkingSpotModel parkingSpotModel = parkingSpotRepository.findById(parkingID)
-                .orElseThrow(() -> new ResourceNotFoundException("Not Found:: " + parkingID));
+        ParkingSpotModel parkingSpotModelOptional = parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Not Found:: " + parkingID));
+        var parkingSpotModel = new ParkingSpotModel();
         BeanUtils.copyProperties(parkingSpotDetails, parkingSpotModel);
-
-
-        parkingSpotModel.setParkingSpotNumber(parkingSpotDetails.getParkingSpotNumber());
-        parkingSpotModel.setLicensePlateCar(parkingSpotDetails.getLicensePlateCar());
-        parkingSpotModel.setBrandCar(parkingSpotDetails.getBrandCar());
-        parkingSpotModel.setModelCar(parkingSpotDetails.getModelCar());
-        parkingSpotModel.setColorCar(parkingSpotDetails.getColorCar());
-        parkingSpotModel.setResponsibleName(parkingSpotDetails.getResponsibleName());
-        parkingSpotModel.setApartment(parkingSpotDetails.getApartment());
-        parkingSpotModel.setBlock(parkingSpotDetails.getBlock());
-
+        parkingSpotModel.setId(parkingSpotModelOptional.getId());
+        parkingSpotModel.setRegistrationDate(parkingSpotModelOptional.getRegistrationDate());
         return parkingSpotRepository.save(parkingSpotModel);
-
-
     }
 }
 

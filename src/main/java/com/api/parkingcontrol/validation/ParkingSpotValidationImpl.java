@@ -14,7 +14,7 @@ import java.util.UUID;
 
 
 @Component
-public class ParkingSpotValidationImpl implements ParkingSpotValidation {
+public class ParkingSpotValidationImpl  {
 
     final  ParkingSpotRepository parkingSpotRepository;
 
@@ -25,7 +25,7 @@ public class ParkingSpotValidationImpl implements ParkingSpotValidation {
 
 
 
-    @Override
+
     public ParkingSpotDto validationLicensePLate(ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException {
 
         if (existsByParkingSpotNumber(parkingSpotDto.getParkingSpotNumber()) ){
@@ -40,7 +40,7 @@ public class ParkingSpotValidationImpl implements ParkingSpotValidation {
 
     }
 
-    @Override
+
     public Optional<ParkingSpotModel> ifParkingSpotNotempty (ParkingSpotModel parkingSpotModelOptional) throws ResourceNotFoundException, NoSuchElementException {
         Optional<ParkingSpotModel> parkingSpotValid = Optional.ofNullable(parkingSpotModelOptional);
 
@@ -63,7 +63,7 @@ public class ParkingSpotValidationImpl implements ParkingSpotValidation {
   // return parkingSpotRepository.existsById(id);
 
 
-    @Override
+
     public ParkingSpotModel notAllowedMod(UUID parkingID, ParkingSpotModel parkingSpotDetails) throws ResourceNotFoundException {
 
         ParkingSpotModel parkingSpotModel = parkingSpotRepository.findById(parkingID)
@@ -81,6 +81,7 @@ public class ParkingSpotValidationImpl implements ParkingSpotValidation {
     public boolean existsById (UUID id)  {
         return parkingSpotRepository.existsById(id);
     }
+
     public boolean existsByLicensePlateCar(String licensePlateCar) throws DataIntegrityViolationException {
         return parkingSpotRepository.existsByLicensePlateCar(licensePlateCar);
     }

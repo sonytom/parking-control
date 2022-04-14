@@ -23,11 +23,11 @@ public interface ParkingSpotService {
      * @throws ResourceNotFoundException if dados if comflict throw exeption
      *
      */
-    ResponseEntity<ParkingSpotModel> save (ParkingSpotDto parkingSpotDto) throws  DataIntegrityViolationException;
+    ParkingSpotModel save (ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException, ResourceNotFoundException;
 
-    ResponseEntity<ParkingSpotModel> getParkingSpotById(UUID parkingID) throws ResourceNotFoundException, NoSuchElementException;
+    ParkingSpotModel getParkingSpotById(UUID parkingID) throws ResourceNotFoundException, NoSuchElementException;
 
-    ResponseEntity<List<ParkingSpotModel>> getAll() throws ResourceNotFoundException, NoSuchElementException;
+    List<ParkingSpotModel> getAll() throws ResourceNotFoundException, NoSuchElementException;
 
     Map<String, Boolean> deleteParkingSpot(UUID parkingID) throws ResourceNotFoundException;
 

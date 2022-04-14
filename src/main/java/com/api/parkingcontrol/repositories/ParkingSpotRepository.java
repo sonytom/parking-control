@@ -1,8 +1,6 @@
 package com.api.parkingcontrol.repositories;
 
 
-import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
-import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

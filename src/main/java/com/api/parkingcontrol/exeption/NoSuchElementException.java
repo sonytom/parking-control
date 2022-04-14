@@ -1,10 +1,6 @@
 package com.api.parkingcontrol.exeption;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-
-public class NoSuchElementException extends Exception{
+public class NoSuchElementException extends RuntimeException{
 
 
     public NoSuchElementException(String message){
