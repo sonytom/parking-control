@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.constraints.NotNull;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -20,11 +22,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
+    @NotNull
     @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus (HttpStatus.CONFLICT)
+    @ResponseStatus (HttpStatus.NOT_FOUND)
     public ErrorDetails resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(true));
-        return  errorDetails;
+        return new ErrorDetails(ex.getMessage(), request.getDescription(true));
     }
 
     @ExceptionHandler(NoSuchElementException.class)

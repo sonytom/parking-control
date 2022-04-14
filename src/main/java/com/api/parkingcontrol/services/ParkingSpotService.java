@@ -1,11 +1,8 @@
 package com.api.parkingcontrol.services;
 
 import com.api.parkingcontrol.dto.ParkingSpotDto;
-import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
-import com.api.parkingcontrol.exeption.NoSuchElementException;
 import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -23,14 +20,46 @@ public interface ParkingSpotService {
      * @throws ResourceNotFoundException if dados if comflict throw exeption
      *
      */
-    ParkingSpotModel save (ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException, ResourceNotFoundException;
+    ParkingSpotModel save (ParkingSpotDto parkingSpotDto) ;
 
-    ParkingSpotModel getParkingSpotById(UUID parkingID) throws ResourceNotFoundException, NoSuchElementException;
 
-    List<ParkingSpotModel> getAll() throws ResourceNotFoundException, NoSuchElementException;
 
-    Map<String, Boolean> deleteParkingSpot(UUID parkingID) throws ResourceNotFoundException;
+    /**
+     * get bd parking spot model by id
+     *
+     * @return Return ParkingSpotModel
+     *
+     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     *
+     */
+    ParkingSpotModel getParkingSpotById(UUID parkingID) ;
 
-    ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) throws ResourceNotFoundException;
+    /**
+     * return all parking spot models
+     *
+     * @return Return ParkingSpotModel
+     *
+     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     *
+     */
+    List<ParkingSpotModel> getAll() ;
+    /**
+     * return a boolean if deleted of db
+     *
+     * @return Return ParkingSpotModel
+     *
+     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     *
+     */
+    Map<String, Boolean> deleteParkingSpot(UUID parkingID) ;
+    /**
+     * update a parkingspot model
+     *
+     * @return Return ParkingSpotModel
+     *
+     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     *
+     */
+    ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails);
 
 }
