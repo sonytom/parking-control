@@ -7,26 +7,23 @@ import com.api.parkingcontrol.services.ParkingSpotService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.stereotype.Controller;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/parking-spot")
-@Controller
+@RequestMapping("/parking-spot/")
 public class ParkingSpotController {
 
-    final ParkingSpotService parkingSpotService;
+    private final ParkingSpotService parkingSpotService;
 
-    public ParkingSpotController(ParkingSpotService parkingSpotService) {
-        this.parkingSpotService = parkingSpotService;
-    }
 
     @ApiOperation(value = "Return all parking Slots", produces = "application/json")
     @ApiResponses({
@@ -72,13 +69,13 @@ public class ParkingSpotController {
     }
 
 
-    @ApiOperation(value = "alter one parking spotmodel by id",produces = "application/json")
+    @ApiOperation(value = "alter one parking spotmodel by id", produces = "application/json")
     @ApiResponses({
             @ApiResponse(code = 200, message = "return parkingspot saved on db with id and date"),
             @ApiResponse(code = 500, message = "Internal error occurred", response = ErrorDetails.class)
     })
     @PutMapping("parkingspot-id/{parkingID}")
-    public ParkingSpotModel updateParkingspot(@NotNull  @PathVariable(value = "parkingID") UUID parkingID, @Valid @RequestBody ParkingSpotDto parkingSpotDetails) {
+    public ParkingSpotModel updateParkingspot(@NotNull @PathVariable(value = "parkingID") UUID parkingID, @Valid @RequestBody ParkingSpotDto parkingSpotDetails) {
         return parkingSpotService.updateParkingSpot(parkingID, parkingSpotDetails);
     }
 }

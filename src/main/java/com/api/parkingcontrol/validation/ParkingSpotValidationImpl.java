@@ -41,46 +41,6 @@ public class ParkingSpotValidationImpl  {
     }
 
 
-    public Optional<ParkingSpotModel> ifParkingSpotNotempty (ParkingSpotModel parkingSpotModelOptional) throws ResourceNotFoundException, NoSuchElementException {
-        Optional<ParkingSpotModel> parkingSpotValid = Optional.ofNullable(parkingSpotModelOptional);
-
-        if (parkingSpotValid.isEmpty()) {
-
-            throw new ResourceNotFoundException("não tem ");
-
-        } else if (!existsById(parkingSpotModelOptional.getId())) {
-
-            throw new NoSuchElementException("Não existe no banco de dados ");
-
-        } else {
-            return parkingSpotValid;
-        }
-    }
-
-
-
-
-  // return parkingSpotRepository.existsById(id);
-
-
-
-    public ParkingSpotModel notAllowedMod(UUID parkingID, ParkingSpotModel parkingSpotDetails) throws ResourceNotFoundException {
-
-        ParkingSpotModel parkingSpotModel = parkingSpotRepository.findById(parkingID)
-                .orElseThrow(() -> new ResourceNotFoundException("Not Found:: " + parkingID));
-        if (!(parkingSpotModel.getId().equals(parkingSpotDetails.getId())) || ((parkingSpotModel.getRegistrationDate().equals(parkingSpotDetails.getRegistrationDate())))){
-            System.out.println("oi");
-        }
-
-        return parkingSpotDetails;
-
-    }
-
-
-
-    public boolean existsById (UUID id)  {
-        return parkingSpotRepository.existsById(id);
-    }
 
     public boolean existsByLicensePlateCar(String licensePlateCar) {
         return parkingSpotRepository.existsByLicensePlateCar(licensePlateCar);

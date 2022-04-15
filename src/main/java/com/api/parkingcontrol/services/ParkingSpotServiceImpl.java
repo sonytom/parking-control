@@ -2,10 +2,11 @@ package com.api.parkingcontrol.services;
 
 import com.api.parkingcontrol.controllers.ParkingSpotController;
 import com.api.parkingcontrol.dto.ParkingSpotDto;
+import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
 import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.repositories.ParkingSpotRepository;
-import com.sun.jdi.event.ExceptionEvent;
+import com.api.parkingcontrol.validation.ParkingSpotValidationImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ParkingSpotServiceImpl implements ParkingSpotService {
 
     final ParkingSpotRepository parkingSpotRepository;
+    final ParkingSpotValidationImpl parkingSpotValidation;
 
 
-    public ParkingSpotServiceImpl(ParkingSpotRepository parkingSpotRepository) {
+    public ParkingSpotServiceImpl(ParkingSpotRepository parkingSpotRepository, ParkingSpotValidationImpl parkingSpotValidation) {
         this.parkingSpotRepository = parkingSpotRepository;
-
+        this.parkingSpotValidation = parkingSpotValidation;
     }
 
     @Transactional
@@ -35,8 +37,12 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
         ParkingSpotModel parkingSpotModel = new ParkingSpotModel();
         BeanUtils.copyProperties(parkingSpotDto, parkingSpotModel);
         parkingSpotModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-        return Optional.of(parkingSpotRepository.save(parkingSpotModel)).orElseThrow(() -> new ResourceNotFoundException("lista vazia"));
-    }
+
+
+            return Optional.of(parkingSpotRepository.save(parkingSpotModel)).orElseThrow(() -> new DataIntegrityViolationException("lista vazia"));
+
+
+           }
 /*
     private Optional<SomeObject> getObjFromService(Service someService) {
         try {
@@ -51,7 +57,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     public ParkingSpotModel getParkingSpotById(UUID parkingID) {
 
 
-             return parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("funciona?"));
+        return parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("funciona?"));
 
 
     }
