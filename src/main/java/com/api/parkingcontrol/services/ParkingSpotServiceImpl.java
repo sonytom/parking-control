@@ -2,13 +2,14 @@ package com.api.parkingcontrol.services;
 
 import com.api.parkingcontrol.controllers.ParkingSpotController;
 import com.api.parkingcontrol.dto.ParkingSpotDto;
-import com.api.parkingcontrol.exeption.NoSuchElementException;
 import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.repositories.ParkingSpotRepository;
+import com.sun.jdi.event.ExceptionEvent;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -36,21 +37,27 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
         parkingSpotModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
         return Optional.of(parkingSpotRepository.save(parkingSpotModel)).orElseThrow(() -> new ResourceNotFoundException("lista vazia"));
     }
+/*
+    private Optional<SomeObject> getObjFromService(Service someService) {
+        try {
+            return Optional.of(someService.getSomeObject());
+        } catch (ServiceException e) {
+            LOG.error("Something nasty happened", e);
+        }
+        return Optional.empty();
+    }
+*/
+
+    public ParkingSpotModel getParkingSpotById(UUID parkingID) {
 
 
+             return parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("funciona?"));
 
-    public ParkingSpotModel getParkingSpotById(UUID parkingID)  {
-                      Optional<ParkingSpotModel> parkingSpotID = Optional.ofNullable(parkingSpotRepository.findById(parkingID).orElseThrow(() ->
-                      new ResourceNotFoundException("Não existe com este id ")));
-              return parkingSpotID.get().add(linkTo(methodOn(ParkingSpotController.class).getAllParkingSpots()).withRel("List all ParkSpots"));
 
     }
 
 
     public List<ParkingSpotModel> getAll() {
-
-        // refatorar para stream talves
-
         List<ParkingSpotModel> getAllparking = parkingSpotRepository.findAll();
         for (ParkingSpotModel parkingSpotModel : getAllparking) {
             UUID parkingID = parkingSpotModel.getId();
@@ -61,7 +68,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
 
 
     @Transactional
-    public Map<String, Boolean> deleteParkingSpot(UUID parkingID)  {
+    public Map<String, Boolean> deleteParkingSpot(UUID parkingID) {
         Optional<ParkingSpotModel> parkingSpotID = Optional.ofNullable(parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Não tem para deletar ")));
         parkingSpotRepository.delete(parkingSpotID.get());
         Map<String, Boolean> response = new HashMap<>();
@@ -71,17 +78,6 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
 
     @Transactional
     public ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) {
-        // fazer de outro jeito
-        // return ResponseEntity.status(HttpStatus.OK).body(parkingSpotService.save(parkingSpotModel));
-        //  parkingSpotModel.setParkingSpotNumber(parkingSpotDetails.getParkingSpotNumber());
-        //  parkingSpotModel.setLicensePlateCar(parkingSpotDetails.getLicensePlateCar());
-        //  parkingSpotModel.setBrandCar(parkingSpotDetails.getBrandCar());
-        //  parkingSpotModel.setModelCar(parkingSpotDetails.getModelCar());
-        //  parkingSpotModel.setColorCar(parkingSpotDetails.getColorCar());
-        //  parkingSpotModel.setResponsibleName(parkingSpotDetails.getResponsibleName());
-        //  parkingSpotModel.setApartment(parkingSpotDetails.getApartment());
-        //  parkingSpotModel.setBlock(parkingSpotDetails.getBlock());
-
         ParkingSpotModel parkingSpotModelOptional = parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Not Found:: " + parkingID));
         var parkingSpotModel = new ParkingSpotModel();
         BeanUtils.copyProperties(parkingSpotDetails, parkingSpotModel);

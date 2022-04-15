@@ -82,13 +82,13 @@ public class ParkingSpotValidationImpl  {
         return parkingSpotRepository.existsById(id);
     }
 
-    public boolean existsByLicensePlateCar(String licensePlateCar) throws DataIntegrityViolationException {
+    public boolean existsByLicensePlateCar(String licensePlateCar) {
         return parkingSpotRepository.existsByLicensePlateCar(licensePlateCar);
     }
-    private boolean existsByParkingSpotNumber(String parkingSpotNumber) throws DataIntegrityViolationException {
+    private boolean existsByParkingSpotNumber(String parkingSpotNumber)  {
         return parkingSpotRepository.existsByParkingSpotNumber(parkingSpotNumber);
     }
-    private boolean existsByApartmentAndBlock(String apartment, String block) throws DataIntegrityViolationException {
+    private boolean existsByApartmentAndBlock(String apartment, String block)  {
         return parkingSpotRepository.existsByApartmentAndBlock(apartment,block);
     }
 

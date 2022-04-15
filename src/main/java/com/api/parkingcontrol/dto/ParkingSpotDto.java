@@ -2,6 +2,7 @@ package com.api.parkingcontrol.dto;
 
 import com.api.parkingcontrol.repositories.ParkingSpotRepository;
 import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -103,7 +104,6 @@ public class ParkingSpotDto {
     public int hashCode() {
         return Objects.hash(licensePlateCar);
     }
-
 
 
 }
