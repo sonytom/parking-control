@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,7 +19,6 @@ public interface ParkingSpotService {
      * @throws ResourceNotFoundException if dados if comflict throw exeption
      */
     ParkingSpotModel save(ParkingSpotDto parkingSpotDto);
-
 
     /**
      * get bd parking spot model by id

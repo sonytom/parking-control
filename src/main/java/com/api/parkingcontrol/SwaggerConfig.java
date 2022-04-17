@@ -11,13 +11,11 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
-
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -39,7 +37,6 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .build()
                 .apiInfo(getApiInfo());
     }
-
     private ApiInfo getApiInfo() {
         return new ApiInfo(
                 "Program for parking spots\r\n",

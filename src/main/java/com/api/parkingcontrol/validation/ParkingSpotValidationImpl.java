@@ -1,37 +1,21 @@
 package com.api.parkingcontrol.validation;
 
-
 import com.api.parkingcontrol.dto.ParkingSpotDto;
 import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
-import com.api.parkingcontrol.exeption.NoSuchElementException;
-import com.api.parkingcontrol.exeption.ResourceNotFoundException;
-import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.repositories.ParkingSpotRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-import java.util.UUID;
-
-
+@AllArgsConstructor
 @Component
 public class ParkingSpotValidationImpl  {
-
     final  ParkingSpotRepository parkingSpotRepository;
-
-    public ParkingSpotValidationImpl(ParkingSpotRepository parkingSpotRepository) {
-        this.parkingSpotRepository = parkingSpotRepository;
-    }
-
-
-
-
-
-    public ParkingSpotDto validationLicensePLate(ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException {
+    public ParkingSpotDto validationDataConflict(ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException {
 
         if (existsByParkingSpotNumber(parkingSpotDto.getParkingSpotNumber()) ){
-            throw new DataIntegrityViolationException("Conflito in Spot Number");
+            throw new DataIntegrityViolationException("conflict: in Spot Number is alredy in uses");
         }else if (existsByLicensePlateCar(parkingSpotDto.getLicensePlateCar() )) {
-            throw new DataIntegrityViolationException("Conflito in License Plate car");
+            throw new DataIntegrityViolationException("conflict: in License Plate car is alredy in uses");
         }else if (existsByApartmentAndBlock(parkingSpotDto.getApartment(), parkingSpotDto.getBlock())){
             throw new DataIntegrityViolationException("conflict: parking spot is alredy in uses");
         }else{
@@ -39,8 +23,6 @@ public class ParkingSpotValidationImpl  {
         }
 
     }
-
-
 
     public boolean existsByLicensePlateCar(String licensePlateCar) {
         return parkingSpotRepository.existsByLicensePlateCar(licensePlateCar);
@@ -51,6 +33,4 @@ public class ParkingSpotValidationImpl  {
     private boolean existsByApartmentAndBlock(String apartment, String block)  {
         return parkingSpotRepository.existsByApartmentAndBlock(apartment,block);
     }
-
 }
-
