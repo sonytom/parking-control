@@ -24,18 +24,20 @@ public class ParkingSpotController {
 
     private final ParkingSpotService parkingSpotService;
 
-    // chage api operations messagades swagger and test all methods
+    // chage api operations message
+    //@ApiResponse(code = 400, message = "your request have a problem"),
 
     @ApiOperation(value = "Return all parking Slots", produces = "application/json")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns all parking slots"),
+            @ApiResponse(code = 400, message = "Your request have a problem"),
             @ApiResponse(code = 500, message = "Internal error occurred", response = ErrorDetails.class)
     })
-    @GetMapping ("/")
+
+    @GetMapping ()
     public List<ParkingSpotModel> getAllParkingSpots() {
         return parkingSpotService.getAll();
     }
-
 
     @ApiOperation(value = "Return parkingspot by id", produces = "application/json")
     @ApiResponses({
@@ -47,17 +49,15 @@ public class ParkingSpotController {
         return parkingSpotService.getParkingSpotById(parkingID);
     }
 
-
     @ApiOperation(value = "post and save parking spot", produces = "application/json")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns a parkingspot model saved on db"),
             @ApiResponse(code = 500, message = "Internal error occurred", response = ErrorDetails.class)
     })
-    @PostMapping("/")
+    @PostMapping()
     public ParkingSpotModel saveParkingSpot(@RequestBody @Valid ParkingSpotDto parkingSpotDto) {
         return parkingSpotService.save(parkingSpotDto);
     }
-
 
     @ApiOperation(value = "delete one parking spot by id", produces = "application/json")
     @ApiResponses({
