@@ -3,20 +3,19 @@ package com.api.parkingcontrol.services;
 import com.api.parkingcontrol.dto.ParkingSpotDto;
 import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
-import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
+
 public interface ParkingSpotService {
     /**
      * IF ok saved on bd
      *
      * @return Return ParkingSpotModel
-     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     * @throws com.api.parkingcontrol.exeption.DataIntegrityViolationException if already have information on database
      */
     ParkingSpotModel save(ParkingSpotDto parkingSpotDto);
 
@@ -24,7 +23,7 @@ public interface ParkingSpotService {
      * get bd parking spot model by id
      *
      * @return Return ParkingSpotModel
-     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     * @throws ResourceNotFoundException if not found in database
      */
    ParkingSpotModel getParkingSpotById(UUID parkingID);
 
@@ -32,7 +31,7 @@ public interface ParkingSpotService {
      * return all parking spot models
      *
      * @return Return ParkingSpotModel
-     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     * @throws ResourceNotFoundException if not found in database
      */
     List<ParkingSpotModel> getAll();
 
@@ -40,7 +39,7 @@ public interface ParkingSpotService {
      * return a boolean if deleted of db
      *
      * @return Return ParkingSpotModel
-     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     * @throws ResourceNotFoundException if not found in database
      */
     Map<String, Boolean> deleteParkingSpot(UUID parkingID);
 
@@ -48,7 +47,7 @@ public interface ParkingSpotService {
      * update a parkingspot model
      *
      * @return Return ParkingSpotModel
-     * @throws ResourceNotFoundException if dados if comflict throw exeption
+     * @throws ResourceNotFoundException if not found in database
      */
     ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails);
 

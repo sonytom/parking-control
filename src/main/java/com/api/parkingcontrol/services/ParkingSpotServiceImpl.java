@@ -2,7 +2,6 @@ package com.api.parkingcontrol.services;
 
 import com.api.parkingcontrol.controllers.ParkingSpotController;
 import com.api.parkingcontrol.dto.ParkingSpotDto;
-import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
 import com.api.parkingcontrol.exeption.ResourceNotFoundException;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.repositories.ParkingSpotRepository;
@@ -11,10 +10,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -33,13 +34,15 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
         BeanUtils.copyProperties(parkingSpotDto, parkingSpotModel);
         parkingSpotModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
         return Optional.of(parkingSpotRepository.save(parkingSpotModel)).
-                orElseThrow(() -> new DataIntegrityViolationException("lista vazia"));
+                orElseThrow(() -> new ResourceNotFoundException("cannot save resouce not found"));
     }
 
     @Override
     public ParkingSpotModel getParkingSpotById(UUID parkingID) {
-        return parkingSpotRepository.findById(parkingID).
-                orElseThrow(() -> new ResourceNotFoundException("funciona?"));
+        var parkingSpotID = Optional.of(parkingSpotRepository.findById(parkingID).orElseThrow(() ->
+                new ResourceNotFoundException("Not found id on database")));
+        return parkingSpotID.get().add(linkTo(methodOn(ParkingSpotController.class).
+                getAllParkingSpots()).withRel("List all ParkSpots"));
     }
 
     @Override
@@ -50,7 +53,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
             parkingSpotModel.add(linkTo(methodOn(ParkingSpotController.class).getParkingSpotById(parkingID)).withSelfRel());
         }
         return Optional.of((getAllparking)).orElseThrow(() ->
-                new ResourceNotFoundException("lista vazia"));
+                new ResourceNotFoundException("Not found in database"));
     }
 
     @Transactional
@@ -58,7 +61,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     public Map<String, Boolean> deleteParkingSpot(UUID parkingID) {
         var parkingSpotID = parkingSpotRepository.findById(parkingID);
         parkingSpotRepository.delete(parkingSpotID.orElseThrow(() ->
-                new ResourceNotFoundException("Not for delete")));
+                new ResourceNotFoundException("Not found in database")));
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
@@ -67,7 +70,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     @Transactional
     @Override
     public ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) {
-        ParkingSpotModel parkingSpotModelOptional = parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Not Found:: " + parkingID));
+        ParkingSpotModel parkingSpotModelOptional = parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Not found in database:: " + parkingID));
         var parkingSpotModel = new ParkingSpotModel();
         BeanUtils.copyProperties(parkingSpotDetails, parkingSpotModel);
         parkingSpotModel.setId(parkingSpotModelOptional.getId());

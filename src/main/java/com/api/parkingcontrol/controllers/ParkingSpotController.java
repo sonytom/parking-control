@@ -24,7 +24,7 @@ public class ParkingSpotController {
 
     private final ParkingSpotService parkingSpotService;
 
-    // chage api operations messagades swagger and test all methods 
+    // chage api operations messagades swagger and test all methods
 
     @ApiOperation(value = "Return all parking Slots", produces = "application/json")
     @ApiResponses({
@@ -68,7 +68,6 @@ public class ParkingSpotController {
     public Map<String, Boolean> deleteParkingSpot(@NotNull @Valid @PathVariable(value = "parkingID") UUID parkingID) {
         return parkingSpotService.deleteParkingSpot(parkingID);
     }
-
 
     @ApiOperation(value = "alter one parking spotmodel by id", produces = "application/json")
     @ApiResponses({
