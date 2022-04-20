@@ -28,11 +28,19 @@ services:
       networks:
         - postgres
       restart: unless-stopped
+  sonarqube:
+    container_name: sonar
+    image: sonarqube
+    ports:
+        - "9000:9000"
 
 networks:
   postgres:
       driver: bridge
 
+
+
 volumes:
   postgres:
   pgadmin:
+  sonarqube:

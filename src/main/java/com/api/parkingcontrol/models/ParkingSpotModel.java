@@ -1,6 +1,7 @@
 package com.api.parkingcontrol.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "TB_PARKING_SPOT")
 public class ParkingSpotModel extends RepresentationModel<ParkingSpotModel> implements Serializable {
 
