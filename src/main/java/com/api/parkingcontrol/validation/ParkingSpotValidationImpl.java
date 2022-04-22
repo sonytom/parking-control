@@ -8,29 +8,20 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-public class ParkingSpotValidationImpl  {
-    final  ParkingSpotRepository parkingSpotRepository;
-    public ParkingSpotDto validationDataConflict(ParkingSpotDto parkingSpotDto) throws DataIntegrityViolationException {
+public class ParkingSpotValidationImpl {
 
-        if (existsByParkingSpotNumber(parkingSpotDto.getParkingSpotNumber()) ){
-            throw new DataIntegrityViolationException("conflict: in Spot Number is alredy in uses");
-        }else if (existsByLicensePlateCar(parkingSpotDto.getLicensePlateCar() )) {
-            throw new DataIntegrityViolationException("conflict: in License Plate car is alredy in uses");
-        }else if (existsByApartmentAndBlock(parkingSpotDto.getApartment(), parkingSpotDto.getBlock())){
-            throw new DataIntegrityViolationException("conflict: parking spot is alredy in uses");
-        }else{
-            return parkingSpotDto;
+    final ParkingSpotRepository parkingSpotRepository;
+
+    public ParkingSpotDto validationDataConflict(ParkingSpotDto parkingSpotDto) {
+
+        if (parkingSpotRepository.findByParkingSpotNumber(parkingSpotDto.getParkingSpotNumber()).size() == 1) {
+            throw new DataIntegrityViolationException("Parking spot number already exists");
+        } else if (parkingSpotRepository.findByLicensePlateCar(parkingSpotDto.getLicensePlateCar()).size() == 1) {
+            throw new DataIntegrityViolationException("getLicensePlateCar already exists");
+        } else if (parkingSpotRepository.findByApartmentAndBlock(parkingSpotDto.getApartment(), parkingSpotDto.getBlock()).isEmpty()) {
+             return parkingSpotDto;
+        } else {
+            throw new DataIntegrityViolationException("Apartment and block already exists");
         }
-
-    }
-
-    public boolean existsByLicensePlateCar(String licensePlateCar) {
-        return parkingSpotRepository.existsByLicensePlateCar(licensePlateCar);
-    }
-    private boolean existsByParkingSpotNumber(String parkingSpotNumber)  {
-        return parkingSpotRepository.existsByParkingSpotNumber(parkingSpotNumber);
-    }
-    private boolean existsByApartmentAndBlock(String apartment, String block)  {
-        return parkingSpotRepository.existsByApartmentAndBlock(apartment,block);
     }
 }

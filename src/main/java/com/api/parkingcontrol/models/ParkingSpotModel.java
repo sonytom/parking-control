@@ -14,7 +14,6 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Table(name = "TB_PARKING_SPOT")
 public class ParkingSpotModel extends RepresentationModel<ParkingSpotModel> implements Serializable {
 
