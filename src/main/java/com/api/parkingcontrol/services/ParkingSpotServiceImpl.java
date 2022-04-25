@@ -70,6 +70,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     @Transactional
     @Override
     public ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) {
+        parkingSpotValidation.validationDataConflict(parkingSpotDetails);
         ParkingSpotModel parkingSpotModelOptional = parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Not found in database:: " + parkingID));
         var parkingSpotModel = new ParkingSpotModel();
         BeanUtils.copyProperties(parkingSpotDetails, parkingSpotModel);

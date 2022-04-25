@@ -13,7 +13,6 @@ public class ParkingSpotValidationImpl {
     final ParkingSpotRepository parkingSpotRepository;
 
     public ParkingSpotDto validationDataConflict(ParkingSpotDto parkingSpotDto) {
-
         if (parkingSpotRepository.findByParkingSpotNumber(parkingSpotDto.getParkingSpotNumber()).size() == 1) {
             throw new DataIntegrityViolationException("Parking spot number already exists");
         } else if (parkingSpotRepository.findByLicensePlateCar(parkingSpotDto.getLicensePlateCar()).size() == 1) {

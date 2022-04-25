@@ -1,5 +1,6 @@
 package com.api.parkingcontrol.stub;
 
+import com.api.parkingcontrol.dto.ParkingSpotDto;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -78,7 +79,7 @@ public class ParkingSpotBuilder {
         return this;
     }
 
-    public ParkingSpotModel build() {
+    public ParkingSpotModel buildModel() {
         ParkingSpotModel parkingSpotModel = new ParkingSpotModel(
                 uuid,
                 parkingSpotNumber,
@@ -91,7 +92,20 @@ public class ParkingSpotBuilder {
                 apartment,
                 block);
         return parkingSpotModel;
-
     }
+
+    public ParkingSpotDto buildDto() {
+        ParkingSpotDto parkinspotDto = new ParkingSpotDto(
+                parkingSpotNumber,
+                licensePlateCar,
+                brandCar,
+                modelCar,
+                colorCar,
+                responsibleName,
+                apartment,
+                block);
+        return parkinspotDto;
+    }
+
 
 }
