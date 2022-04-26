@@ -23,9 +23,6 @@ public class ParkingSpotController {
 
     private final ParkingSpotService parkingSpotService;
 
-    // chage api operations message
-    //@ApiResponse(code = 400, message = "your request have a problem"),
-
     @ApiOperation(value = "Return all parking Slots", produces = "application/json")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns all parking slots"),
@@ -53,6 +50,7 @@ public class ParkingSpotController {
             @ApiResponse(code = 200, message = "Returns a parkingspot model saved on db"),
             @ApiResponse(code = 500, message = "Internal error occurred", response = ErrorDetails.class)
     })
+
     @PostMapping()
     public ParkingSpotModel saveParkingSpot(@RequestBody @Valid ParkingSpotDto parkingSpotDto) {
         return parkingSpotService.save(parkingSpotDto);
@@ -63,6 +61,7 @@ public class ParkingSpotController {
             @ApiResponse(code = 200, message = "Returns boolean if deleted"),
             @ApiResponse(code = 500, message = "Internal error occurred", response = ErrorDetails.class)
     })
+
     @DeleteMapping("/parkingspot-id/{parkingID}")
     public Map<String, Boolean> deleteParkingSpot(@NotNull @Valid @PathVariable(value = "parkingID") UUID parkingID) {
         return parkingSpotService.deleteParkingSpot(parkingID);
@@ -73,8 +72,10 @@ public class ParkingSpotController {
             @ApiResponse(code = 200, message = "return parkingspot saved on db with id and date"),
             @ApiResponse(code = 500, message = "Internal error occurred", response = ErrorDetails.class)
     })
+
     @PutMapping("/parkingspot-id/{parkingID}")
     public ParkingSpotModel updateParkingspot(@NotNull @PathVariable(value = "parkingID") UUID parkingID, @Valid @RequestBody ParkingSpotDto parkingSpotDetails) {
         return parkingSpotService.updateParkingSpot(parkingID, parkingSpotDetails);
     }
+
 }

@@ -48,7 +48,6 @@ public class ParkingSpotControllerTest {
 
         Mockito.when(parkingSpotService.getAll()).thenReturn(expectGet);
 
-
         final var response = parkingSpotController.getAllParkingSpots();
         Assertions.assertThat(expectGet).isEqualTo(response);
     }
@@ -67,7 +66,6 @@ public class ParkingSpotControllerTest {
         Assertions.assertThat(expectGet).isEqualTo(response);
     }
 
-    
 
     // add all fileds
     @Test

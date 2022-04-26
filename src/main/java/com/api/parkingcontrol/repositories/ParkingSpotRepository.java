@@ -10,11 +10,8 @@ import java.util.UUID;
 
 @Repository
 public interface ParkingSpotRepository extends JpaRepository<ParkingSpotModel, UUID> {
-
     List<ParkingSpotModel> findByParkingSpotNumber(String parkingSpotNumber);
-
     List<ParkingSpotModel> findByLicensePlateCar(String licensePlateCar);
-
     List<ParkingSpotModel> findByApartmentAndBlock(String apartment, String block);
 
 }

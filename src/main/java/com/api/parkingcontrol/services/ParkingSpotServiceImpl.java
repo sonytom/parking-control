@@ -40,7 +40,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     @Override
     public ParkingSpotModel getParkingSpotById(UUID parkingID) {
         var parkingSpotID = Optional.of(parkingSpotRepository.findById(parkingID).orElseThrow(() ->
-                new ResourceNotFoundException("Not found id on database")));
+                new ResourceNotFoundException("Not found in database:: " + parkingID)));
         return parkingSpotID.get().add(linkTo(methodOn(ParkingSpotController.class).
                 getAllParkingSpots()).withRel("List all ParkSpots"));
     }
@@ -61,7 +61,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     public Map<String, Boolean> deleteParkingSpot(UUID parkingID) {
         var parkingSpotID = parkingSpotRepository.findById(parkingID);
         parkingSpotRepository.delete(parkingSpotID.orElseThrow(() ->
-                new ResourceNotFoundException("Not found in database")));
+                new ResourceNotFoundException("Not found in database:: " + parkingID)));
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
@@ -71,7 +71,8 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     @Override
     public ParkingSpotModel updateParkingSpot(UUID parkingID, @Valid ParkingSpotDto parkingSpotDetails) {
         parkingSpotValidation.validationDataConflict(parkingSpotDetails);
-        ParkingSpotModel parkingSpotModelOptional = parkingSpotRepository.findById(parkingID).orElseThrow(() -> new ResourceNotFoundException("Not found in database:: " + parkingID));
+        ParkingSpotModel parkingSpotModelOptional = parkingSpotRepository.findById(parkingID).
+                orElseThrow(() -> new ResourceNotFoundException("Not found in database:: " + parkingID));
         var parkingSpotModel = new ParkingSpotModel();
         BeanUtils.copyProperties(parkingSpotDetails, parkingSpotModel);
         parkingSpotModel.setId(parkingSpotModelOptional.getId());

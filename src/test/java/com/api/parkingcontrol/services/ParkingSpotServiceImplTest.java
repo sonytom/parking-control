@@ -142,14 +142,15 @@ class ParkingSpotServiceImplTest {
     }
 
     @Test
-    @DisplayName("validate to update")
+    @DisplayName("update not found id")
     void returnParkingspotmodelIfIdNotFound() {
 
             var uuid = UUID.randomUUID();
+
         Mockito.when(parkingSpotRepository.findById(ArgumentMatchers.any(UUID.class))).
                 thenThrow(new ResourceNotFoundException("Not found in database:: " + uuid));
 
-        assertThrows(ResourceNotFoundException.class, () ->  parkingSpotService. updateParkingSpot
+        assertThrows(ResourceNotFoundException.class, () ->  parkingSpotService.updateParkingSpot
                 (uuid, new ParkingSpotDto()));
 
         Mockito.verify(parkingSpotRepository, Mockito.times(1)).findById(uuid);
@@ -179,15 +180,14 @@ class ParkingSpotServiceImplTest {
     @DisplayName("validate to delete")
     void notReturnDeletedParkingNotFound() {
 
-        var parkinspotDto = new ParkingSpotBuilder().withId(UUID.randomUUID()).buildModel();
 
         var uuid = UUID.randomUUID();
-        Mockito.when(parkingSpotRepository.findById(ArgumentMatchers.any(UUID.class))).
-                thenThrow(new ResourceNotFoundException("Not found in database"));
+
+        Mockito.when(parkingSpotRepository.findById(uuid)).thenThrow(new ResourceNotFoundException("Not found in database:: " + uuid));
 
         assertThrows(ResourceNotFoundException.class, () ->  parkingSpotService.deleteParkingSpot(uuid));
-
         Mockito.verify(parkingSpotRepository, Mockito.times(1)).findById(uuid);
+        //Mockito.verify(parkingSpotService, Mockito.times(1)).deleteParkingSpot(uuid);
 
 
 
