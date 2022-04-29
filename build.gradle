@@ -16,10 +16,9 @@ sonarqube {
         property "sonar.projectKey", "parking-control"
         property "sonar.organization", "parking-control"
         property "sonar.host.url", "http://localhost:9000"
-        property "sonar.login", "b70e936b5fc2f01f4b05e3291d079d14ded7b582"
+        property "sonar.login", "f2023ef8ec4a27b0834832bcbb5d7b253918a3c5"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/build/reports/jacoco/testjacoco.xml"
-       // property "sonar.coverageReportPaths", "build/reports/pitest/index.html"
-        //property"mutationAnalysis.pitest.sensor.reports.directory=.\ProjectName\target\pit-reports\202110281422"
+        property "dc5.mutationAnalysis.pitest.sensor.reports.directory", "build/reports/pitest"
     }
 }
 
@@ -39,14 +38,19 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.20'
     implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.squareup.okhttp3:okhttp:4.10.0-RC1'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
+    testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
+
+//    JUnit Vintage — este módulo permite compatibilidade retroativa com JUnit 4 ou mesmo JUnit 3.
     testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.8.2'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
-   // pitest 'org.example.pit.plugins:pitest-custom-plugin:0.42'
+
+
     // swagger
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
     // docs
     implementation group: 'org.springdoc', name: 'springdoc-openapi', version: '1.6.7'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.0.4.RELEASE'
@@ -59,7 +63,6 @@ dependencies {
 }
 
 pitest {
-  //  targetClasses = ['our.base.package.*']  //by default "${project.group}.*"
     pitestVersion = '1.7.4' //not needed when a default PIT version should be used
     threads = 4
     outputFormats = ['XML', 'HTML']
@@ -67,7 +70,7 @@ pitest {
 }
 
 jacocoTestReport {
-    afterEvaluate {
+   afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: ['com/api/parkingcontrol/ParkingControlApplication.**'

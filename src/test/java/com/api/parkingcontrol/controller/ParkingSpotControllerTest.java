@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
+//JUnit 5 permite que vários testes trabalhem simultaneamente
+//JUnit 4 vai apenas ate o java 7
+
+
 @RunWith(MockitoJUnitRunner.class)
 public class ParkingSpotControllerTest {
 
@@ -96,13 +101,13 @@ public class ParkingSpotControllerTest {
                 .withLicensePlateCar("aaa")
                 .buildModel();
 
-        final var dd = new ParkingSpotBuilder()
+        final var expectedDto = new ParkingSpotBuilder()
                 .withParkingSpotNumber("BBB")
                 .withLicensePlateCar("bbb")
                 .buildDto();
 
 
-        Mockito.when(parkingSpotService.updateParkingSpot(ArgumentMatchers.any(expectGet.getId().getClass()), ArgumentMatchers.any(dd.getClass())))
+        Mockito.when(parkingSpotService.updateParkingSpot(ArgumentMatchers.any(expectGet.getId().getClass()), ArgumentMatchers.any(expectedDto.getClass())))
                 .thenReturn(expectGet);
 
         final var response = new ParkingSpotBuilder().withParkingSpotNumber(expectGet.getParkingSpotNumber()).buildDto();

@@ -40,7 +40,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
     @Override
     public ParkingSpotModel getParkingSpotById(UUID parkingID) {
         var parkingSpotID = Optional.of(parkingSpotRepository.findById(parkingID).orElseThrow(() ->
-                new ResourceNotFoundException("Not found in database:: " + parkingID)));
+                new ResourceNotFoundException("Not found id in database:: " + parkingID)));
         return parkingSpotID.get().add(linkTo(methodOn(ParkingSpotController.class).
                 getAllParkingSpots()).withRel("List all ParkSpots"));
     }

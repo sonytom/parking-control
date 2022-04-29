@@ -1,7 +1,6 @@
 package com.api.parkingcontrol.validation;
 
 import com.api.parkingcontrol.exeption.DataIntegrityViolationException;
-import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.repositories.ParkingSpotRepository;
 import com.api.parkingcontrol.stub.ParkingSpotBuilder;
 import org.junit.jupiter.api.Assertions;
@@ -13,10 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 class ParkingSpotValidationImplTest {
@@ -57,10 +53,6 @@ class ParkingSpotValidationImplTest {
 
     }
 
-
-
-
-
     @Test
     @DisplayName("Teste de validação de estacionamento")
     void validationDataConflict4() {
@@ -76,11 +68,5 @@ class ParkingSpotValidationImplTest {
 
     }
 
-//else if (parkingSpotRepository.findByApartmentAndBlock(parkingSpotDto.getApartment(), parkingSpotDto.getBlock()).isEmpty()) {
-       // return parkingSpotDto;
-       // } else {
-       // throw new DataIntegrityViolationException("Apartment and block already exists");
-       // }
-       // }
 
 }
